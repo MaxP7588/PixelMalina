@@ -41,8 +41,11 @@ const canvasEvents = {
     // Event Listeners
     config.canvas.addEventListener('mousedown', (e) => {
       const rect = config.canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const scaleX = config.canvas.width / rect.width;
+      const scaleY = config.canvas.height / rect.height;
+      
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
 
       // Agregar console.log para debug
       console.log('Herramienta actual:', tools.currentTool);
@@ -61,8 +64,12 @@ const canvasEvents = {
     config.canvas.addEventListener('mousemove', (e) => {
       if (!isDrawing) return;
       const rect = config.canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const scaleX = config.canvas.width / rect.width;
+      const scaleY = config.canvas.height / rect.height;
+      
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      
       paintCellWithoutSave(x, y);
     });
 
