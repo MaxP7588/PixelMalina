@@ -38,6 +38,49 @@ const canvasEvents = {
       patterns.redrawTemplate();
     }
 
+    // Funciones de exportación/importación
+    function exportDrawing() {
+      const imageData = config.ctx.getImageData(0, 0, config.canvas.width, config.canvas.height);
+      const drawingData = {
+        width: config.canvas.width,
+        height: config.canvas.height,
+        template: config.template,
+        data: Array.from(imageData.data)
+      };
+      
+      const blob = new Blob([JSON.stringify(drawingData)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pixel-drawing.json';
+      a.click();
+      
+      URL.revokeObjectURL(url);
+    }
+    
+    function importDrawing(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const drawingData = JSON.parse(e.target.result);
+        
+        // Restaurar dimensiones
+        config.canvas.width = drawingData.width;
+        config.canvas.height = drawingData.height;
+        
+        // Restaurar datos de imagen
+        const imageData = new ImageData(
+          new Uint8ClampedArray(drawingData.data),
+          drawingData.width,
+          drawingData.height
+        );
+        
+        config.ctx.putImageData(imageData, 0, 0);
+        patterns.redrawTemplate();
+      };
+      reader.readAsText(file);
+    }
+
     // Event Listeners
     config.canvas.addEventListener('mousedown', (e) => {
       const rect = config.canvas.getBoundingClientRect();
@@ -122,6 +165,19 @@ const canvasEvents = {
       if (e.ctrlKey && e.key === 'z') {
         e.preventDefault();
         tools.undo();
+      }
+    });
+
+    // Event listeners para los nuevos botones
+    document.getElementById('exportBtn').addEventListener('click', exportDrawing);
+
+    document.getElementById('importBtn').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+    
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        importDrawing(e.target.files[0]);
       }
     });
 

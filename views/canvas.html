@@ -39,6 +39,17 @@
         <input id="colorPicker" type="color" value="#000000">
       </div>
       <button id="clearBtn">Limpiar</button>
+      <div class="file-tools">
+        <button id="exportBtn" class="tool-btn">
+          <i class="fas fa-download"></i>
+          <span>Exportar</span>
+        </button>
+        <button id="importBtn" class="tool-btn">
+          <i class="fas fa-upload"></i>
+          <span>Importar</span>
+        </button>
+        <input type="file" id="fileInput" accept="application/json" style="display: none;">
+      </div>
     </div>
   </div>
   <script type="module" src="/javascripts/canvas.js"></script>
