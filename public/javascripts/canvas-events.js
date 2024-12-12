@@ -14,7 +14,9 @@ const canvasEvents = {
       const row = Math.floor(y / config.CELL_HEIGHT);
       const col = Math.floor(x / config.CELL_WIDTH);
       
-      const paintColor = tools.currentTool === 'eraser' ? tools.ERASER_COLOR : tools.currentColor;
+      // Modificar esta parte para usar el getter
+      const paintColor = tools.currentTool === 'eraser' ? 
+        tools.ERASER_COLOR : tools.currentColor;
       
       const totalRows = Math.floor(config.canvas.height / config.CELL_HEIGHT);
       const brickRows = Math.max(1, Math.round(totalRows / 4));
@@ -38,13 +40,22 @@ const canvasEvents = {
 
     // Event Listeners
     config.canvas.addEventListener('mousedown', (e) => {
-      isDrawing = true;
-      isDrawingSequence = true;
-      tools.saveState();
       const rect = config.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      paintCell(x, y);
+
+      // Agregar console.log para debug
+      console.log('Herramienta actual:', tools.currentTool);
+
+      if (tools.currentTool === 'bucket') {
+        tools.saveState();
+        tools.floodFill(x, y);
+      } else {
+        isDrawing = true;
+        isDrawingSequence = true;
+        tools.saveState();
+        paintCell(x, y);
+      }
     });
 
     config.canvas.addEventListener('mousemove', (e) => {
@@ -82,6 +93,10 @@ const canvasEvents = {
 
     document.getElementById('eraserBtn').addEventListener('click', () => {
       tools.setActiveTool('eraser');
+    });
+
+    document.getElementById('bucketBtn').addEventListener('click', () => {
+      tools.setActiveTool('bucket');
     });
 
     document.getElementById('undoBtn').addEventListener('click', tools.undo);

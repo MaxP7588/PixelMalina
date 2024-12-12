@@ -7,6 +7,7 @@ const canvasTools = {
     const eraserBtn = document.getElementById('eraserBtn');
     const undoBtn = document.getElementById('undoBtn');
     const colorPresets = document.querySelectorAll('.color-preset');
+    const bucketBtn = document.getElementById('bucketBtn'); // Agregar referencia al nuevo botón
 
     // Estado interno
     let currentTool = 'pencil';
@@ -99,24 +100,117 @@ const canvasTools = {
     }
 
     function setActiveTool(tool) {
+      console.log('Cambiando herramienta a:', tool);
       currentTool = tool;
       pencilBtn.classList.toggle('active', tool === 'pencil');
       eraserBtn.classList.toggle('active', tool === 'eraser');
+      bucketBtn.classList.toggle('active', tool === 'bucket');
     }
 
     function updateUndoButton() {
       undoBtn.disabled = undoHistory.length === 0;
     }
 
+    // Función para flood fill
+    function floodFill(startX, startY) {
+      // Agregar console.log para debug
+      console.log('Iniciando flood fill en:', startX, startY);
+
+      const startRow = Math.floor(startY / config.CELL_HEIGHT);
+      const startCol = Math.floor(startX / config.CELL_WIDTH);
+      
+      // Obtener el color inicial del pixel exacto donde se hizo clic
+      const imageData = config.ctx.getImageData(startX, startY, 1, 1);
+      const startColor = imageData.data;
+      
+      console.log('Color inicial:', startColor);
+
+      // Verificar si ya tiene el color deseado
+      const fillRgb = hexToRgb(currentColor);
+      const targetColor = [fillRgb.r, fillRgb.g, fillRgb.b, 255];
+      
+      if (colorsMatch(Array.from(startColor), targetColor)) {
+        console.log('Mismos colores, retornando');
+        return;
+      }
+
+      const queue = [[startRow, startCol]];
+      const visited = new Set();
+
+      function checkCell(row, col) {
+        const key = `${row},${col}`;
+        if (visited.has(key)) return false;
+        if (row < 0 || row >= Math.floor(config.canvas.height / config.CELL_HEIGHT)) return false;
+        if (col < 0 || col >= Math.floor(config.canvas.width / config.CELL_WIDTH)) return false;
+
+        // Obtener color del centro de la celda
+        const x = col * config.CELL_WIDTH;
+        const y = row * config.CELL_HEIGHT;
+        const cellData = config.ctx.getImageData(x, y, 1, 1).data;
+
+        return colorsMatch(Array.from(cellData), Array.from(startColor));
+      }
+
+      while (queue.length > 0) {
+        const [row, col] = queue.shift();
+        const key = `${row},${col}`;
+
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        // Verificar color antes de pintar
+        if (!checkCell(row, col)) continue;
+
+        // Pintar celda
+        config.ctx.fillStyle = currentColor;
+        const x = col * config.CELL_WIDTH;
+        const y = row * config.CELL_HEIGHT;
+        config.ctx.fillRect(x, y, config.CELL_WIDTH, config.CELL_HEIGHT);
+
+        // Agregar vecinos
+        queue.push(
+          [row - 1, col],
+          [row + 1, col],
+          [row, col - 1],
+          [row, col + 1]
+        );
+      }
+
+      console.log('Flood fill completado');
+      patterns.redrawTemplate();
+    }
+
+    // Función auxiliar para convertir hex a rgb
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+
+    // Función auxiliar para comparar colores
+    function colorsMatch(color1, color2) {
+      // Agregar tolerancia para comparación de colores
+      const tolerance = 5;
+      return Math.abs(color1[0] - color2[0]) <= tolerance &&
+             Math.abs(color1[1] - color2[1]) <= tolerance &&
+             Math.abs(color1[2] - color2[2]) <= tolerance &&
+             Math.abs(color1[3] - color2[3]) <= tolerance;
+    }
+
     return {
-      currentTool,
+      get currentTool() { return currentTool; },
+      get currentColor() { return currentColor; },
+      set currentColor(value) { currentColor = value; },
       ERASER_COLOR,
-      currentColor,
       saveState,
       undo,
       setActiveTool,
       updateUndoButton,
-      clearCache: stateCache.clear // Exponer método para limpiar cache
+      clearCache: stateCache.clear, // Exponer método para limpiar cache
+      floodFill
     };
   }
 };
