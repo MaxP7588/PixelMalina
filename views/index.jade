@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/canvas", method="get")
+    label(for="template") Selecciona la plantilla:
+    select(name="template")
+      option(value="plantilla1") Plantilla 1
+      option(value="plantilla2") Plantilla 2
+    br
+    label(for="width") Ancho:
+    input(type="number", name="width", min="1", required)
+    label(for="height") Alto:
+    input(type="number", name="height", min="1", required)
+    br
+    button(type="submit") Crear

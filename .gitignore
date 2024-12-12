@@ -1,0 +1,31 @@
+# Dependencias de Node
+node_modules/
+
+# Archivos de entorno
+.env
+
+# Archivos de registro
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directorios de producción
+dist/
+build/
+
+# Archivos de cobertura
+coverage/
+
+# Archivos temporales
+tmp/
+temp/
+
+# Configuración de editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
