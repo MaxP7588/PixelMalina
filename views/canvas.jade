@@ -1,7 +1,10 @@
-// views/canvas.jade
 extends layout
 
 block content
   h1 Lienzo de Pixel Art
-  canvas#pixelCanvas(width=width, height=height)
+  div.canvas-container
+    canvas#pixelCanvas
+    div.tools
+      button#clearBtn Limpiar
+      input(type="color", id="colorPicker", value="#000000")
   script(src="/javascripts/canvas.js")
