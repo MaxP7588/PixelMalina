@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PixelMalina</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+</head>
+<body>
+  <h1>PixelMalina</h1>
+  <form action="/canvas" method="get">
+    <label for="template">Selecciona la plantilla:</label>
+    <select name="template">
+      <option value="rejilla">Plantilla Rejilla</option>
+      <option value="ladrillo">Plantilla Ladrillo</option>
+      <option value="mixta">Plantilla Mixta</option>
+    </select>
+    <br>
+    <label for="width">Ancho:</label>
+    <input type="number" name="width" min="1" required>
+    <label for="height">Alto:</label>
+    <input type="number" name="height" min="1" required>
+    <br>
+    <button type="submit">Crear</button>
+  </form>
+</body>
+</html>

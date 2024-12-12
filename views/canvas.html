@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas - PixelMalina</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <div class="canvas-container">
+    <canvas id="pixelCanvas"></canvas>
+    <div class="tools">
+      <div class="drawing-tools">
+        <button id="pencilBtn" class="tool-btn active">
+          <i class="fas fa-pencil-alt"></i>
+          <span>Lápiz</span>
+        </button>
+        <button id="eraserBtn" class="tool-btn">
+          <i class="fas fa-eraser"></i>
+          <span>Borrador</span>
+        </button>
+      </div>
+      <div class="color-tools">
+        <div class="color-presets">
+          <button class="color-preset" data-color="#000000" style="background-color: #000000"></button>
+          <button class="color-preset" data-color="#FFFFFF" style="background-color: #FFFFFF"></button>
+          <button class="color-preset" data-color="#FF0000" style="background-color: #FF0000"></button>
+          <button class="color-preset" data-color="#00FF00" style="background-color: #00FF00"></button>
+          <button class="color-preset" data-color="#0000FF" style="background-color: #0000FF"></button>
+          <button class="color-preset" data-color="#FFFF00" style="background-color: #FFFF00"></button>
+        </div>
+        <input id="colorPicker" type="color" value="#000000">
+      </div>
+      <button id="clearBtn">Limpiar</button>
+    </div>
+  </div>
+  <script src="/javascripts/canvas.js"></script>
+</body>
+</html>
