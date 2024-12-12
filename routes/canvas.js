@@ -5,7 +5,7 @@ router.get('/', function(req, res, next) {
   var template = req.query.template;
   var width = req.query.width;
   var height = req.query.height;
-  res.render('canvas', { template: template, width: width, height: height });
+  res.render('canvas.html', { template: template, width: width, height: height });
 });
 
 module.exports = router;

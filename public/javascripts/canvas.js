@@ -3,6 +3,20 @@ window.onload = function() {
   const ctx = canvas.getContext('2d');
   const colorPicker = document.getElementById('colorPicker');
   const clearBtn = document.getElementById('clearBtn');
+  const pencilBtn = document.getElementById('pencilBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+  const colorPresets = document.querySelectorAll('.color-preset');
+
+  // Variables para las herramientas
+  let currentTool = 'pencil';
+  const ERASER_COLOR = '#FFFFFF';
+
+  // Función para manejar herramientas
+  function setActiveTool(tool) {
+    currentTool = tool;
+    pencilBtn.classList.toggle('active', tool === 'pencil');
+    eraserBtn.classList.toggle('active', tool === 'eraser');
+  }
 
   // Obtener parámetros de la URL
   const params = new URLSearchParams(window.location.search);
@@ -119,6 +133,9 @@ window.onload = function() {
     const row = Math.floor(y / CELL_HEIGHT);
     const col = Math.floor(x / CELL_WIDTH);
     
+    // Determinar el color basado en la herramienta actual
+    const paintColor = currentTool === 'eraser' ? ERASER_COLOR : currentColor;
+    
     // Calcular el límite de filas para el patrón de ladrillo
     const totalRows = Math.floor(canvas.height / CELL_HEIGHT);
     const brickRows = Math.max(1, Math.round(totalRows / 4));
@@ -129,13 +146,13 @@ window.onload = function() {
         const offset = row % 2 === 0 ? 0 : CELL_WIDTH / 2;
         const adjustedCol = Math.floor((x - offset) / CELL_WIDTH);
         if (x >= offset) {
-            ctx.fillStyle = currentColor;
+            ctx.fillStyle = paintColor;
             ctx.fillRect(adjustedCol * CELL_WIDTH + offset, row * CELL_HEIGHT, 
                         CELL_WIDTH, CELL_HEIGHT);
         }
     } else {
         // Lógica de pintura para patrón de rejilla
-        ctx.fillStyle = currentColor;
+        ctx.fillStyle = paintColor;
         ctx.fillRect(col * CELL_WIDTH, row * CELL_HEIGHT, 
                     CELL_WIDTH, CELL_HEIGHT);
     }
@@ -191,6 +208,19 @@ window.onload = function() {
   });
 
   clearBtn.addEventListener('click', clear);
+
+  // Agregar event listeners para las nuevas herramientas
+  pencilBtn.addEventListener('click', () => setActiveTool('pencil'));
+  eraserBtn.addEventListener('click', () => setActiveTool('eraser'));
+
+  // Event listeners para los colores predefinidos
+  colorPresets.forEach(preset => {
+    preset.addEventListener('click', () => {
+      const color = preset.dataset.color;
+      currentColor = color;
+      colorPicker.value = color;
+    });
+  });
 
   // Inicializar canvas
   redrawTemplate();

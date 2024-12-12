@@ -16,6 +16,50 @@ canvas {
 }
 
 .tools {
+  margin-top: 10px;
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.drawing-tools {
+  display: flex;
+  gap: 5px;
+}
+
+.tool-btn {
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tool-btn.active {
+  background: #e0e0e0;
+}
+
+.color-tools {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.color-presets {
+  display: flex;
+  gap: 5px;
+}
+
+.color-preset {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#colorPicker {
+  height: 30px;
 }
