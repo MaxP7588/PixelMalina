@@ -78,4 +78,87 @@ window.onload = function() {
     drawBrickPattern();
     ctx.restore();
 
-    // Dibujar rejilla en la mitad
+    // Dibujar rejilla en la mitad inferior
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, middleY, canvas.width, canvas.height - middleY);
+    ctx.clip();
+    drawGrid();
+    ctx.restore();
+  }
+
+  function paintCell(x, y) {
+    const row = Math.floor(y / CELL_HEIGHT);
+    const col = Math.floor(x / CELL_WIDTH);
+    
+    if (template === 'ladrillo' || (template === 'mixta' && y < canvas.height / 2)) {
+        // Lógica de pintura para patrón de ladrillo
+        const offset = row % 2 === 0 ? 0 : CELL_WIDTH / 2;
+        const adjustedCol = Math.floor((x - offset) / CELL_WIDTH);
+        if (x >= offset) {
+            ctx.fillStyle = currentColor;
+            ctx.fillRect(adjustedCol * CELL_WIDTH + offset, row * CELL_HEIGHT, 
+                        CELL_WIDTH, CELL_HEIGHT);
+        }
+    } else {
+        // Lógica de pintura para patrón de rejilla
+        ctx.fillStyle = currentColor;
+        ctx.fillRect(col * CELL_WIDTH, row * CELL_HEIGHT, 
+                    CELL_WIDTH, CELL_HEIGHT);
+    }
+    redrawTemplate();
+  }
+
+  function redrawTemplate() {
+    switch(template) {
+      case 'rejilla':
+        drawGrid();
+        break;
+      case 'ladrillo':
+        drawBrickPattern();
+        break;
+      case 'mixta':
+        drawMixedPattern();
+        break;
+    }
+  }
+
+  function clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    redrawTemplate();
+  }
+
+  // Event Listeners
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    paintCell(x, y);
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    paintCell(x, y);
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    isDrawing = false;
+  });
+
+  colorPicker.addEventListener('change', (e) => {
+    currentColor = e.target.value;
+  });
+
+  clearBtn.addEventListener('click', clear);
+
+  // Inicializar canvas
+  redrawTemplate();
+};
