@@ -63,3 +63,12 @@ canvas {
 #colorPicker {
   height: 30px;
 }
+
+#undoBtn {
+  margin-left: 10px;
+}
+
+#undoBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
