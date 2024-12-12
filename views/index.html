@@ -1,26 +1,69 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>PixelMalina</title>
-  <link rel='stylesheet' href='/stylesheets/style.css'>
-</head>
-<body>
-  <h1>PixelMalina</h1>
-  <!-- Agregar target="_blank" al formulario -->
-  <form action="/canvas" method="get" target="_blank">
-    <label for="template">Selecciona la plantilla:</label>
-    <select name="template">
-      <option value="rejilla">Plantilla Rejilla</option>
-      <option value="ladrillo">Plantilla Ladrillo</option>
-      <option value="mixta">Plantilla Mixta</option>
-    </select>
-    <br>
-    <label for="width">Ancho:</label>
-    <input type="number" name="width" min="1" required>
-    <label for="height">Alto:</label>
-    <input type="number" name="height" min="1" required>
-    <br>
-    <button type="submit">Crear</button>
-  </form>
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PixelMalina - Editor de pixel art" />
+    <title>PixelMalina</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-content">
+        <h1 class="logo">PixelMalina</h1>
+      </div>
+    </nav>
+
+    <main class="content">
+      <div class="card">
+        <h2>Crear Nuevo Lienzo</h2>
+        <form action="/canvas" method="get" target="_blank" class="canvas-form">
+          <div class="form-group">
+            <label for="template">Selecciona la plantilla:</label>
+            <select name="template" id="template" class="form-control">
+              <option value="rejilla">Plantilla Rejilla</option>
+              <option value="ladrillo">Plantilla Ladrillo</option>
+              <option value="mixta">Plantilla Mixta</option>
+            </select>
+          </div>
+          <br>
+          <div class="form-group dimensions">
+            <div class="input-group">
+              <label for="width">Ancho:</label>
+              <input
+                type="number"
+                name="width"
+                id="width"
+                min="10"
+                max="100"
+                required
+                class="form-control"
+                placeholder="Ej: 32"
+              />
+            </div>
+            <div class="input-group">
+              <label for="height">Alto:</label>
+              <input
+                type="number"
+                name="height"
+                id="height"
+                min="10"
+                max="100"
+                required
+                class="form-control"
+                placeholder="Ej: 32"
+              />
+            </div>
+          </div>
+          <br>
+          <button type="submit" class="button">Crear Lienzo</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2024 PixelMalina</p>
+    </footer>
+  </body>
 </html>
